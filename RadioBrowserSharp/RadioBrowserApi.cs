@@ -52,26 +52,51 @@ namespace RadioBrowserSharp
             return await GetAsync<List<Tag>>("/json/tags", token);
         }
 
-        public static async Task<List<RadioStation>?> ListRadioStationsAsync(SearchType searchType,string content, CancellationToken token = default)
+        public static async Task<List<RadioStation>?> ListRadioStationsAsync(SearchType searchType,string content, ListStationsParams searchParams, CancellationToken token = default)
         {
-            return await GetAsync<List<RadioStation>>($"/json/{searchType.ToString().ToLower()}/content", token);
+            return await GetAsync<List<RadioStation>>($"/json/{searchType.ToString().ToLower()}/{content}{searchParams.ToUrl()}", token);
         }
-        public static async Task<List<RadioStation>?> ListAllRadioStationsAsync(CancellationToken token = default)
+        public static async Task<List<RadioStation>?> ListAllRadioStationsAsync(ListStationsParams searchParams, CancellationToken token = default)
         {
-            return await GetAsync<List<RadioStation>>("/json/stations", token);
+            return await GetAsync<List<RadioStation>>($"/json/stations{searchParams.ToUrl()}", token);
         }
-        public static async Task<List<StationCheckResult>?> ListStationCheckResultsAsync(CancellationToken token = default)
-        {
-            return await GetAsync<List<StationCheckResult>>("/json/checks", token);
-        }
-
-        public static async Task<List<Click>?> ListClicksAsync(CancellationToken token = default)
-        {
-            return await GetAsync<List<Click>>("/json/clicks", token);
+        public static async Task<List<StationCheckResult>?> ListStationCheckResultsAsync(ListCheckParams listCheckParams, CancellationToken token = default)
+        {            
+            return await GetAsync<List<StationCheckResult>>($"/json/checks{listCheckParams.ToUrl()}", token);
         }
 
+        public static async Task<List<Click>?> ListClicksAsync(ListClicksParams listClicksParams ,CancellationToken token = default)
+        {
+            return await GetAsync<List<Click>>($"/json/clicks{listClicksParams.ToUrl()}", token);
+        }
+        public static async Task<List<RadioStation>> SearchAsync(Dictionary<string,string> searchParams, CancellationToken token = default)
+        {
+            return await GetAsync<List<RadioStation>>($"/json/stations/search{SearchParams.GetUrl(searchParams)}", token);
+        }
 
+        public static async Task<List<RadioStation>> SearchByUUIDAsync(string uuids, CancellationToken token = default)
+        {
+            return await GetAsync<List<RadioStation>>($"/json/stations/byuuid?uuids={uuids}", token);
+        }
 
+        public static async Task<List<RadioStation>> SearchTopClicksAsync(TopParams topParams, CancellationToken token = default)
+        {
+            return await GetAsync<List<RadioStation>>($"/json/stations/topclick{topParams.ToUrl()}", token);
+        }
+
+        public static async Task<List<RadioStation>> SearchTopVotesAsync(TopParams topParams, CancellationToken token = default)
+        {
+            return await GetAsync<List<RadioStation>>($"/json/stations/topvote{topParams.ToUrl()}", token);
+        }
+
+        public static async Task<List<RadioStation>> SearchRecentClickAsync(TopParams topParams, CancellationToken token = default)
+        {
+            return await GetAsync<List<RadioStation>>($"/json/stations/lastclick{topParams.ToUrl()}", token);
+        }
+        public static async Task<List<RadioStation>> SearchLastChangeAsync(TopParams topParams, CancellationToken token = default)
+        {
+            return await GetAsync<List<RadioStation>>($"/json/stations/lastchange{topParams.ToUrl()}", token);
+        }
 
 
         public static void SetServerUrl(string url)
@@ -106,6 +131,6 @@ namespace RadioBrowserSharp
             var response = await _client.Value.GetAsync(queryUrl, token);
             var content = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<T>(content);
-        }
+        }        
     }
 }
