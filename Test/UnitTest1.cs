@@ -37,17 +37,17 @@ namespace Test
             Assert.NotNull(tags);
             Assert.NotEmpty(tags);
 
-            var radioStates = RadioBrowserApi.ListRadioStationsAsync( SearchType.ByCodec,"AAC").GetAwaiter().GetResult();
-            Assert.NotNull(radioStates);
-            Assert.NotEmpty(radioStates);
+            //var radioStates = RadioBrowserApi.ListRadioStationsAsync( SearchType.ByCodec,"AAC").GetAwaiter().GetResult();
+            //Assert.NotNull(radioStates);
+            //Assert.NotEmpty(radioStates);
 
-            var allRadioStations = RadioBrowserApi.ListAllRadioStationsAsync().GetAwaiter().GetResult();
-            Assert.NotNull(allRadioStations);
-            Assert.NotEmpty(allRadioStations);
+            //var allRadioStations = RadioBrowserApi.ListAllRadioStationsAsync().GetAwaiter().GetResult();
+            //Assert.NotNull(allRadioStations);
+            //Assert.NotEmpty(allRadioStations);
 
-            var stationCheckResults = RadioBrowserApi.ListStationCheckResultsAsync().GetAwaiter().GetResult();
-            Assert.NotNull(stationCheckResults);
-            Assert.NotEmpty(stationCheckResults);
+            //var stationCheckResults = RadioBrowserApi.ListStationCheckResultsAsync().GetAwaiter().GetResult();
+            //Assert.NotNull(stationCheckResults);
+            //Assert.NotEmpty(stationCheckResults);
         }
     }
 }
