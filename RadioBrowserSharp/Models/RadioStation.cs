@@ -87,12 +87,12 @@ namespace RadioBrowserSharp.Models
         public int SSLError { get; set; }
 
         [JsonPropertyName("geo_lat")]
-        public double GeoLat { get; set; }
+        public double? GeoLat { get; set; }
 
         [JsonPropertyName("geo_long")]
-        public double GeoLong { get; set; }
+        public double? GeoLong { get; set; }
 
         [JsonPropertyName("has_extended_info")]
-        public string? HasExtendedInfo { get; set; }
+        public bool? HasExtendedInfo { get; set; }
     }
 }
