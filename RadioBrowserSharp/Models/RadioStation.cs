@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace RadioBrowserSharp.Models
 {
@@ -94,5 +95,11 @@ namespace RadioBrowserSharp.Models
 
         [JsonPropertyName("has_extended_info")]
         public bool? HasExtendedInfo { get; set; }
+    }
+    [JsonSourceGenerationOptions(WriteIndented = true)]
+    [JsonSerializable(typeof(RadioStation))]
+    [JsonSerializable(typeof(IEnumerable<RadioStation>))]
+    public partial class RadioStationSerializerContext : JsonSerializerContext
+    {
     }
 }

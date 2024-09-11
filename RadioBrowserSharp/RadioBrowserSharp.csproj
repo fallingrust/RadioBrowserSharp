@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
+		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<Version>0.0.0.2</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -12,6 +12,10 @@
 		<PackageProjectUrl>https://github.com/fallingrust/RadioBrowserSharp</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/fallingrust/RadioBrowserSharp</RepositoryUrl>
   </PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Models\lwk54uec.hg1~" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="System.Text.Json" Version="8.0.4" />

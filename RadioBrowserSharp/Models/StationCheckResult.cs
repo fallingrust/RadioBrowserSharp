@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace RadioBrowserSharp.Models
 {
@@ -85,5 +86,11 @@ namespace RadioBrowserSharp.Models
 
         [JsonPropertyName("geo_long")]
         public double GeoLong { get; set; }
+    }
+    [JsonSourceGenerationOptions(WriteIndented = true)]
+    [JsonSerializable(typeof(StationCheckResult))]
+    [JsonSerializable(typeof(IEnumerable<StationCheckResult>))]
+    public partial class StationCheckResultSerializerContext : JsonSerializerContext
+    {
     }
 }

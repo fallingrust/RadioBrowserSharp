@@ -1,4 +1,7 @@
-﻿namespace RadioBrowserSharp.Models
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+
+namespace RadioBrowserSharp.Models
 {
     public class TopParams
     {
@@ -12,5 +15,11 @@
         {
             return $"?offst={Offset}&limit={Limit}&hidebroken={HideBroken}";
         }
+    }
+    [JsonSourceGenerationOptions(WriteIndented = true)]
+    [JsonSerializable(typeof(TopParams))]
+    [JsonSerializable(typeof(IEnumerable<TopParams>))]
+    public partial class TopParamsSerializerContext : JsonSerializerContext
+    {
     }
 }

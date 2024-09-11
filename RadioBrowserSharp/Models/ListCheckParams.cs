@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
+using System.Text.Json.Serialization;
 
 namespace RadioBrowserSharp.Models
 {
@@ -33,5 +35,12 @@ namespace RadioBrowserSharp.Models
             }            
             return sb.ToString();
         }
+    }
+
+    [JsonSourceGenerationOptions(WriteIndented = true)]
+    [JsonSerializable(typeof(ListCheckParams))]
+    [JsonSerializable(typeof(IEnumerable<ListCheckParams>))]
+    public partial class ListCheckParamsSerializerContext : JsonSerializerContext
+    {
     }
 }

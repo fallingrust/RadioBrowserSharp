@@ -1,4 +1,7 @@
-﻿namespace RadioBrowserSharp.Models
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+
+namespace RadioBrowserSharp.Models
 {
     public class ListStationsParams
     {
@@ -14,5 +17,11 @@
         {
             return $"?order={OrderType}&reverse={Reverser}&offst={Offset}&limit={Limit}&hidebroken={HideBroken}";
         }
+    }
+    [JsonSourceGenerationOptions(WriteIndented = true)]
+    [JsonSerializable(typeof(ListStationsParams))]
+    [JsonSerializable(typeof(IEnumerable<ListStationsParams>))]
+    public partial class ListStationsParamsSerializerContext : JsonSerializerContext
+    {
     }
 }
