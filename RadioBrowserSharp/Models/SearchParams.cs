@@ -31,16 +31,16 @@ namespace RadioBrowserSharp.Models
         {
             if (searchParams == null || searchParams.Count <= 0) return "";
 
-            var sb = new StringBuilder("?");
+            var sb = new StringBuilder();
           
             foreach (var kv in searchParams)
             {
-                sb.Append("&");
+                sb.Append('&');
                 sb.Append(kv.Key);
-                sb.Append("=");
+                sb.Append('=');
                 sb.Append(kv.Value);
             }
-            return sb.ToString()[1..sb.Length];
+            return "?" + sb.ToString()[1..sb.Length];
         }
     }
 }
