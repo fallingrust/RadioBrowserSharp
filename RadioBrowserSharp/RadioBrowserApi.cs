@@ -23,34 +23,34 @@ namespace RadioBrowserSharp
             BaseAddress = new Uri("https://" + _url)
         });
 
-        public static async Task<IEnumerable<Country>?> ListCountriesAsync(CancellationToken token = default)
+        public static async Task<IEnumerable<Country>?> ListCountriesAsync(Dictionary<string, string> searchParams, CancellationToken token = default)
         {
-            return await GetAsync("/json/countries",CountrySerializerContext.Default.IEnumerableCountry, token);
+            return await GetAsync($"/json/countries{SearchParams.GetUrl(searchParams)}", CountrySerializerContext.Default.IEnumerableCountry, token);
         }
 
-        public static async Task<IEnumerable<CountryCode>?> ListCountryCodesAsync(CancellationToken token = default)
+        public static async Task<IEnumerable<CountryCode>?> ListCountryCodesAsync(Dictionary<string, string> searchParams, CancellationToken token = default)
         {
-            return await GetAsync("/json/countrycodes",CountryCodeSerializerContext.Default.IEnumerableCountryCode, token);
+            return await GetAsync($"/json/countrycodes{SearchParams.GetUrl(searchParams)}", CountryCodeSerializerContext.Default.IEnumerableCountryCode, token);
         }
 
-        public static async Task<IEnumerable<Codec>?> ListCodecsAsync(CancellationToken token = default)
+        public static async Task<IEnumerable<Codec>?> ListCodecsAsync(Dictionary<string, string> searchParams, CancellationToken token = default)
         {
-            return await GetAsync("/json/codecs", CodecSerializerContext.Default.IEnumerableCodec, token);
+            return await GetAsync($"/json/codecs{SearchParams.GetUrl(searchParams)}", CodecSerializerContext.Default.IEnumerableCodec, token);
         }
        
-        public static async Task<IEnumerable<State>?> ListStatesAsync(CancellationToken token = default)
+        public static async Task<IEnumerable<State>?> ListStatesAsync(Dictionary<string, string> searchParams, CancellationToken token = default)
         {
-            return await GetAsync("/json/states",StateSerializerContext.Default.IEnumerableState, token);
+            return await GetAsync($"/json/states{SearchParams.GetUrl(searchParams)}",StateSerializerContext.Default.IEnumerableState, token);
         }
 
-        public static async Task<IEnumerable<Language>?> ListLanguagesAsync(CancellationToken token = default)
+        public static async Task<IEnumerable<Language>?> ListLanguagesAsync(Dictionary<string, string> searchParams, CancellationToken token = default)
         {
-            return await GetAsync("/json/languages",LanguageSerializerContext.Default.IEnumerableLanguage, token);
+            return await GetAsync($"/json/languages{SearchParams.GetUrl(searchParams)}", LanguageSerializerContext.Default.IEnumerableLanguage, token);
         }
 
-        public static async Task<IEnumerable<Tag>?> ListTagsAsync(CancellationToken token = default)
+        public static async Task<IEnumerable<Tag>?> ListTagsAsync(Dictionary<string, string> searchParams, CancellationToken token = default)
         {
-            return await GetAsync("/json/tags", TagSerializerContext.Default.IEnumerableTag,token);
+            return await GetAsync($"/json/tags{SearchParams.GetUrl(searchParams)}", TagSerializerContext.Default.IEnumerableTag,token);
         }
 
         public static async Task<IEnumerable<RadioStation>?> ListRadioStationsAsync(SearchType searchType,string content, ListStationsParams searchParams, CancellationToken token = default)
