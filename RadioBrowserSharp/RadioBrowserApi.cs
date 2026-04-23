@@ -1,9 +1,8 @@
 ﻿using RadioBrowserSharp.Models;
 using System;
 using System.Collections.Generic;
-using System.Net;
+using System.Globalization;
 using System.Net.Http;
-using System.Net.NetworkInformation;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 using System.Threading;
@@ -13,124 +12,125 @@ namespace RadioBrowserSharp
 {
     public class RadioBrowserApi
     {
-        public const string BASE_URL = "all.api.radio-browser.info";
-        public const string DEFAULT_URL = "de1.api.radio-browser.info";
-
-
-        private static string _url = DEFAULT_URL;
+        public const string BASE_URL = "https://all.api.radio-browser.info";
+     
         private static readonly Lazy<HttpClient> _client = new(() => new()
         {
-            BaseAddress = new Uri("https://" + _url)
+            BaseAddress = new Uri(BASE_URL)
         });
 
         public static async Task<IEnumerable<Country>?> ListCountriesAsync(Dictionary<string, string> searchParams, CancellationToken token = default)
         {
-            return await GetAsync($"/json/countries{SearchParams.GetUrl(searchParams)}", CountrySerializerContext.Default.IEnumerableCountry, token);
-        }
-
-        public static async Task<IEnumerable<CountryCode>?> ListCountryCodesAsync(Dictionary<string, string> searchParams, CancellationToken token = default)
-        {
-            return await GetAsync($"/json/countrycodes{SearchParams.GetUrl(searchParams)}", CountryCodeSerializerContext.Default.IEnumerableCountryCode, token);
+            return await GetAsync($"/json/countries{searchParams.ToUrl()}", CountrySerializerContext.Default.IEnumerableCountry, token);
         }
 
         public static async Task<IEnumerable<Codec>?> ListCodecsAsync(Dictionary<string, string> searchParams, CancellationToken token = default)
         {
-            return await GetAsync($"/json/codecs{SearchParams.GetUrl(searchParams)}", CodecSerializerContext.Default.IEnumerableCodec, token);
+            return await GetAsync($"/json/codecs{searchParams.ToUrl()}", CodecSerializerContext.Default.IEnumerableCodec, token);
         }
        
-        public static async Task<IEnumerable<State>?> ListStatesAsync(Dictionary<string, string> searchParams, CancellationToken token = default)
+        public static async Task<IEnumerable<State>?> ListStatesAsync(string? country, Dictionary<string, string> searchParams, CancellationToken token = default)
         {
-            return await GetAsync($"/json/states{SearchParams.GetUrl(searchParams)}",StateSerializerContext.Default.IEnumerableState, token);
+            if (!string.IsNullOrWhiteSpace(country))
+            {
+                return await GetAsync($"/json/states/{country}{searchParams.ToUrl()}", StateSerializerContext.Default.IEnumerableState, token);
+            }
+            return await GetAsync($"/json/states{searchParams.ToUrl()}",StateSerializerContext.Default.IEnumerableState, token);
         }
 
         public static async Task<IEnumerable<Language>?> ListLanguagesAsync(Dictionary<string, string> searchParams, CancellationToken token = default)
         {
-            return await GetAsync($"/json/languages{SearchParams.GetUrl(searchParams)}", LanguageSerializerContext.Default.IEnumerableLanguage, token);
+            return await GetAsync($"/json/languages{searchParams.ToUrl()}", LanguageSerializerContext.Default.IEnumerableLanguage, token);
         }
 
         public static async Task<IEnumerable<Tag>?> ListTagsAsync(Dictionary<string, string> searchParams, CancellationToken token = default)
         {
-            return await GetAsync($"/json/tags{SearchParams.GetUrl(searchParams)}", TagSerializerContext.Default.IEnumerableTag,token);
+            return await GetAsync($"/json/tags{searchParams.ToUrl()}", TagSerializerContext.Default.IEnumerableTag,token);
         }
 
-        public static async Task<IEnumerable<RadioStation>?> ListRadioStationsAsync(SearchType searchType,string content, ListStationsParams searchParams, CancellationToken token = default)
+        public static async Task<IEnumerable<RadioStation>?> SearchStationsByAsync(SearchBy searchType, string searchterm, CancellationToken token = default)
         {
-            return await GetAsync($"/json/{searchType.ToString().ToLower()}/{content}{searchParams.ToUrl()}",RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
+            return await GetAsync($"/json/{searchType.ToString().ToLower()}/{searchterm}",RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
         }
-        public static async Task<IEnumerable<RadioStation>?> ListAllRadioStationsAsync(ListStationsParams searchParams, CancellationToken token = default)
+        public static async Task<IEnumerable<RadioStation>?> ListAllRadioStationsAsync(CancellationToken token = default)
         {
-            return await GetAsync($"/json/stations{searchParams.ToUrl()}", RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
-        }
-        public static async Task<IEnumerable<StationCheckResult>?> ListStationCheckResultsAsync(ListCheckParams listCheckParams, CancellationToken token = default)
-        {            
-            return await GetAsync($"/json/checks{listCheckParams.ToUrl()}",StationCheckResultSerializerContext.Default.IEnumerableStationCheckResult, token);
+            return await GetAsync($"/json/stations", RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
         }
 
-        public static async Task<IEnumerable<Click>?> ListClicksAsync(ListClicksParams listClicksParams ,CancellationToken token = default)
+        public static async Task<IEnumerable<StationCheckResult>?> ListStationCheckResultsAsync(string? stationUUID, Dictionary<string, string> searchParams, CancellationToken token = default)
         {
-            return await GetAsync($"/json/clicks{listClicksParams.ToUrl()}",ClickSerializerContext.Default.IEnumerableClick, token);
-        }
-        public static async Task<IEnumerable<RadioStation>> SearchAsync(Dictionary<string,string> searchParams, CancellationToken token = default)
-        {
-            return await GetAsync($"/json/stations/search{SearchParams.GetUrl(searchParams)}", RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
-        }
-
-        public static async Task<IEnumerable<RadioStation>> SearchByUUIDAsync(string uuids, CancellationToken token = default)
-        {
-            return await GetAsync($"/json/stations/byuuid?uuids={uuids}", RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
-        }
-
-        public static async Task<IEnumerable<RadioStation>> SearchTopClicksAsync(TopParams topParams, CancellationToken token = default)
-        {
-            return await GetAsync($"/json/stations/topclick{topParams.ToUrl()}", RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
-        }
-
-        public static async Task<IEnumerable<RadioStation>> SearchTopVotesAsync(TopParams topParams, CancellationToken token = default)
-        {
-            return await GetAsync($"/json/stations/topvote{topParams.ToUrl()}", RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
-        }
-
-        public static async Task<IEnumerable<RadioStation>> SearchRecentClickAsync(TopParams topParams, CancellationToken token = default)
-        {
-            return await GetAsync($"/json/stations/lastclick{topParams.ToUrl()}", RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
-        }
-        public static async Task<IEnumerable<RadioStation>> SearchLastChangeAsync(TopParams topParams, CancellationToken token = default)
-        {
-            return await GetAsync($"/json/stations/lastchange{topParams.ToUrl()}", RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
-        }
-
-
-        public static void SetServerUrl(string url)
-        {
-            _url = url;
-        }
-
-        public static async Task<string> GetServersAsync()
-        {
-            var ips = await Dns.GetHostAddressesAsync(BASE_URL);
-            var url = DEFAULT_URL;
-            var lastReplayTime = long.MaxValue;
-            foreach (var ip in ips)
+            if (!string.IsNullOrWhiteSpace(stationUUID))
             {
-                var replay = await new Ping().SendPingAsync(ip);
-                if (replay != null && replay.Status == IPStatus.Success && replay.RoundtripTime < lastReplayTime)
-                {
-                    lastReplayTime = replay.RoundtripTime;
-                    url = ip.ToString();
-                }
+                return await GetAsync($"/json/checks/{stationUUID}{searchParams.ToUrl()}", StationCheckResultSerializerContext.Default.IEnumerableStationCheckResult, token);
             }
-            url = (await Dns.GetHostEntryAsync(url))?.HostName;
-            if (!string.IsNullOrWhiteSpace(url))
-            {
-                return url;
-            }
-            return DEFAULT_URL;
+            return await GetAsync($"/json/checks{searchParams.ToUrl()}", StationCheckResultSerializerContext.Default.IEnumerableStationCheckResult, token);
         }
 
-        private static async Task<T> GetAsync<T>(string queryUrl, JsonTypeInfo<T> jsonTypeInfo, CancellationToken token)
+        public static async Task<IEnumerable<Click>?> ListClicksAsync(string? stationUUID, Dictionary<string, string> searchParams, CancellationToken token = default)
+        {
+            if (!string.IsNullOrWhiteSpace(stationUUID))
+            {
+                return await GetAsync($"/json/clicks/{stationUUID}{searchParams.ToUrl()}", ClickSerializerContext.Default.IEnumerableClick, token);
+            }
+            return await GetAsync($"/json/clicks{searchParams.ToUrl()}", ClickSerializerContext.Default.IEnumerableClick, token);
+        }
+
+        public static async Task<ClickCounter?> ClickCounterAsync(string stationUUID, CancellationToken token = default)
+        {
+            return await GetAsync($"/json/url/{stationUUID}", ClickCounterSerializerContext.Default.ClickCounter, token);
+        }
+
+        public static async Task<VoteCounter?> VoteCounterAsync(string stationUUID, CancellationToken token = default)
+        {
+            return await GetAsync($"/json/vote/{stationUUID}", VoteCounterSerializerContext.Default.VoteCounter, token);
+        }
+
+        public static async Task<IEnumerable<RadioStation>?> SearchAsync(Dictionary<string,string> searchParams, CancellationToken token = default)
+        {
+            return await GetAsync($"/json/stations/search{searchParams.ToUrl()}", RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
+        }
+
+        public static async Task<IEnumerable<RadioStation>?> SearchTopClicksAsync(int count, Dictionary<string, string> searchParams, CancellationToken token = default)
+        {
+            if (count > 0)
+            {
+                return await GetAsync($"/json/stations/topclick/{count}{searchParams.ToUrl()}", RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
+            }
+            return await GetAsync($"/json/stations/topclick{searchParams.ToUrl()}", RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
+        }
+
+        public static async Task<IEnumerable<RadioStation>?> SearchTopVotesAsync(int count, Dictionary<string, string> searchParams, CancellationToken token = default)
+        {
+            if (count > 0)
+            {
+                return await GetAsync($"/json/stations/topvote/{count}{searchParams.ToUrl()}", RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
+            }
+            return await GetAsync($"/json/stations/topvote{searchParams.ToUrl()}", RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
+        }
+
+        public static async Task<IEnumerable<RadioStation>?> SearchRecentClickAsync(int count, Dictionary<string, string> searchParams, CancellationToken token = default)
+        {
+            if (count > 0)
+            {
+                return await GetAsync($"/json/stations/lastclick/{count}{searchParams.ToUrl()}", RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
+            }
+            return await GetAsync($"/json/stations/lastclick{searchParams.ToUrl()}", RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
+        }
+      
+        public static async Task<IEnumerable<RadioStation>?> SearchLastChangeAsync(int count, Dictionary<string, string> searchParams, CancellationToken token = default)
+        {
+            if (count > 0)
+            {
+                return await GetAsync($"/json/stations/lastchange/{count}{searchParams.ToUrl()}", RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
+            }
+            return await GetAsync($"/json/stations/lastchange{searchParams.ToUrl()}", RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
+        }
+
+        private static async Task<T?> GetAsync<T>(string queryUrl, JsonTypeInfo<T> jsonTypeInfo, CancellationToken token = default)
         {
             var response = await _client.Value.GetAsync(queryUrl, token);
-            var content = await response.Content.ReadAsStringAsync();
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync(token);
             return JsonSerializer.Deserialize<T>(content, jsonTypeInfo);
         }
     }

@@ -33,9 +33,6 @@ namespace RadioBrowserSharp.Models
         [JsonPropertyName("tags")]
         public string? Tags { get; set; }
 
-        [JsonPropertyName("country")]
-        public string? Country { get; set; }
-
         [JsonPropertyName("countrycode")]
         public string? CountryCode { get; set; }
 
@@ -49,7 +46,7 @@ namespace RadioBrowserSharp.Models
         public string? LanguageCodes { get; set; }
 
         [JsonPropertyName("votes")]
-        public int Votes { get; set; }
+        public int? Votes { get; set; }
 
         [JsonPropertyName("lastchangetime")]
         public string? LastChangeTime { get; set; }
@@ -58,13 +55,13 @@ namespace RadioBrowserSharp.Models
         public string? Codec { get; set; }
 
         [JsonPropertyName("bitrate")]
-        public int Bitrate { get; set; }
+        public int? Bitrate { get; set; }
 
         [JsonPropertyName("hls")]
-        public int HLS { get; set; }
+        public int? HLS { get; set; }
 
         [JsonPropertyName("lastcheckok")]
-        public int LastCheckOK { get; set; }
+        public int? LastCheckOK { get; set; }
 
         [JsonPropertyName("lastchecktime")]
         public string? LastCheckTime { get; set; }
@@ -79,13 +76,13 @@ namespace RadioBrowserSharp.Models
         public string? ClickTimestamp { get; set; }
 
         [JsonPropertyName("clickcount")]
-        public int ClickCount { get; set; }
+        public int? ClickCount { get; set; }
 
         [JsonPropertyName("clicktrend")]
-        public int ClickTrend { get; set; }
+        public int? ClickTrend { get; set; }
 
         [JsonPropertyName("ssl_error")]
-        public int SSLError { get; set; }
+        public int? SSLError { get; set; }
 
         [JsonPropertyName("geo_lat")]
         public double? GeoLat { get; set; }

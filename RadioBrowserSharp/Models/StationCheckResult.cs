@@ -18,13 +18,13 @@ namespace RadioBrowserSharp.Models
         public string? Codec { get; set; }
 
         [JsonPropertyName("bitrate")]
-        public int Bitrate { get; set; }
+        public int? Bitrate { get; set; }
 
         [JsonPropertyName("hls")]
-        public int HLS { get; set; }
+        public int? HLS { get; set; }
 
         [JsonPropertyName("ok")]
-        public int OK { get; set; }
+        public int? OK { get; set; }
 
         [JsonPropertyName("timestamp")]
         public string? Timestamp { get; set; }
@@ -33,11 +33,10 @@ namespace RadioBrowserSharp.Models
         public string? UrlCache { get; set; }
 
         [JsonPropertyName("metainfo_overrides_database")]
-        public int MetainfoOverridesDatabase { get; set; }
+        public int? MetainfoOverridesDatabase { get; set; }
 
         [JsonPropertyName("public")]
         public string? Public { get; set; }
-
 
         [JsonPropertyName("name")]
         public string? Name { get; set; }
@@ -73,19 +72,19 @@ namespace RadioBrowserSharp.Models
         public string? Sampling { get; set; }
 
         [JsonPropertyName("timing_ms")]
-        public int TimingMS { get; set; }
+        public int? TimingMS { get; set; }
 
         [JsonPropertyName("languagecodes")]
         public string? LanguageCodes { get; set; }
 
         [JsonPropertyName("ssl_error")]
-        public int SSLError { get; set; }
+        public int? SSLError { get; set; }
 
         [JsonPropertyName("geo_lat")]
-        public double GeoLat { get; set; }
+        public double? GeoLat { get; set; }
 
         [JsonPropertyName("geo_long")]
-        public double GeoLong { get; set; }
+        public double? GeoLong { get; set; }
     }
     [JsonSourceGenerationOptions(WriteIndented = true)]
     [JsonSerializable(typeof(StationCheckResult))]

@@ -11,7 +11,7 @@ namespace RadioBrowserSharp.Models
         public string? CountryCode { get; set; }
        
         [JsonPropertyName("stationcount")]
-        public int StationCount { get; set; }
+        public int? StationCount { get; set; }
     }
     [JsonSourceGenerationOptions(WriteIndented = true)]
     [JsonSerializable(typeof(Country))]

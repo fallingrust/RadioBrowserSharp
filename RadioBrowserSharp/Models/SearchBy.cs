@@ -1,6 +1,6 @@
 ﻿namespace RadioBrowserSharp.Models
 {
-    public enum SearchType
+    public enum SearchBy
     {
         Byuuid,
         ByName,

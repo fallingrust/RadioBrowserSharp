@@ -3,7 +3,7 @@ using System.Text;
 
 namespace RadioBrowserSharp.Models
 {
-    public class SearchParams
+    public static class SearchParams
     {
         public const string Name = "name";
         public const string NameExact = "nameExact";
@@ -27,7 +27,7 @@ namespace RadioBrowserSharp.Models
         public const string Limit = "limit";
         public const string HideBroken = "hidebroken";
 
-        public static string GetUrl(Dictionary<string, string> searchParams)
+        public static string ToUrl(this Dictionary<string, string> searchParams)
         {
             if (searchParams == null || searchParams.Count <= 0) return "";
 
