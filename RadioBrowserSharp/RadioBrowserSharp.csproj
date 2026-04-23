@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0;net8.0;net10.0</TargetFrameworks>
+		<TargetFrameworks>net8.0;net10.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<Version>1.0.0</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -12,9 +12,4 @@
 		<PackageProjectUrl>https://github.com/fallingrust/RadioBrowserSharp</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/fallingrust/RadioBrowserSharp</RepositoryUrl>
   </PropertyGroup>
-	
-	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-		<PackageReference Include="System.Text.Json" Version="10.0.7" />
-	</ItemGroup>
-
 </Project>

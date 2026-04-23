@@ -1,7 +1,7 @@
-﻿using RadioBrowserSharp.Models;
+﻿using RadioBrowserSharp.Extensions;
+using RadioBrowserSharp.Models;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
@@ -50,7 +50,7 @@ namespace RadioBrowserSharp
 
         public static async Task<IEnumerable<RadioStation>?> SearchStationsByAsync(SearchBy searchType, string searchterm, CancellationToken token = default)
         {
-            return await GetAsync($"/json/{searchType.ToString().ToLower()}/{searchterm}",RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
+            return await GetAsync($"/json/{searchType.ToUrl()}/{Uri.EscapeDataString (searchterm)}",RadioStationSerializerContext.Default.IEnumerableRadioStation, token);
         }
         public static async Task<IEnumerable<RadioStation>?> ListAllRadioStationsAsync(CancellationToken token = default)
         {

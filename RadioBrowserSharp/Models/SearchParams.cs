@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace RadioBrowserSharp.Models
@@ -29,17 +30,21 @@ namespace RadioBrowserSharp.Models
 
         public static string ToUrl(this Dictionary<string, string> searchParams)
         {
-            if (searchParams == null || searchParams.Count <= 0) return "";
+            if (searchParams == null || searchParams.Count <= 0)
+            {
+                return "";
+            }
 
             var sb = new StringBuilder();
           
             foreach (var kv in searchParams)
             {
                 sb.Append('&');
-                sb.Append(kv.Key);
+                sb.Append(Uri.EscapeDataString(kv.Key));
                 sb.Append('=');
-                sb.Append(kv.Value);
+                sb.Append(Uri.EscapeDataString(kv.Value));
             }
+
             return "?" + sb.ToString()[1..sb.Length];
         }
     }
